@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Security.Cryptography;
 using System.IO;
+using System.Windows.Shell;
 
 namespace Hash_Calculator
 {
@@ -24,32 +25,50 @@ namespace Hash_Calculator
     {
 
 		string pthFile;
-		bool hasRun = false;
 		List<Task> tasks = new List<Task>();
+		List<GUIRow> rows = new List<GUIRow>();
+		Boolean tasksCompleted = true;
+		int nrOfTasks = 0;
+		Thickness thkNormal = new Thickness(1);
+		Thickness thkThick = new Thickness(5, 1, 5, 1);
+
         public MainWindow()
         {
             InitializeComponent();
 			this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
+			Title = "Hash Calculator";
         }
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			setInitialContent();
+			rows.Add(new GUIRow(SupportedHashAlgorithm.MD5, chkMD5, txtMD5, cpyMD5, prgMD5));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA1, chkSHA1, txtSHA1, cpySHA1, prgSHA1));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA256, chkSHA256, txtSHA256, cpySHA256, prgSHA256));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512));
 			setInitialState();
 		}
 
-		private void setInitialContent()
-		{
-
-		}
 
 		private void setInitialState()
 		{
 			lblStatus.Content = "Ready";
+			foreach (GUIRow row in rows)
+			{
+				row.CopyButton.Tag = row.TextBox;
+				row.CopyButton.Click += new RoutedEventHandler(this.copyToClipboard);
+				row.TextBox.BorderThickness = thkNormal;
+				row.ProgressBar.IsIndeterminate = false;
+			}
 		}
 
+		private void copyToClipboard(object sender, RoutedEventArgs e)
+		{
+			TextBox textBox = (TextBox)((Button)sender).Tag;
+			Clipboard.SetText(textBox.Text);
+		}
 
-        private void btnFileOpen_Click(object sender, RoutedEventArgs e)
+		private void btnFileOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 			openFileDialog.CheckFileExists = true;
@@ -58,72 +77,71 @@ namespace Hash_Calculator
             if(openFileDialog.ShowDialog() == true)
             {
                 txtFileOpen.Text = openFileDialog.FileName;
-            }
-			btnCalculate.IsEnabled = true;
+				btnCalculate.IsEnabled = true;
+			}
         }
 
-		private void btnCalculate_Click(object sender, RoutedEventArgs e)
+		private async void btnCalculate_Click(object sender, RoutedEventArgs e)
 		{
+			if (!checkTasksCompleted())
+			{
+				alertCalculationOngoing();
+				return;
+			}
+			tasksCompleted = false;
+			prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
 			pthFile = txtFileOpen.Text;
 			tasks.Clear();
 			btnSave.IsEnabled = true;
-			
 			lblStatus.Content = "Starting threads...";
-			if(chkMD5.IsChecked == true)
+			prgMain.Maximum = 0;
+			prgMain.Value = 0;
+			foreach (GUIRow row in rows)
 			{
-				startTask(txtMD5, SupportedHashAlgorithm.MD5);
+				if(row.isChecked())
+				{
+					row.ProgressBar.IsIndeterminate = true;
+					row.TextBox.Text = "";
+					prgMain.Maximum++;
+					startTask(row);
+				}
 			}
-			if (chkSHA1.IsChecked == true)
-			{
-				startTask(txtSHA1, SupportedHashAlgorithm.SHA1);
-			}
-			if (chkSHA256.IsChecked == true)
-			{
-				startTask(txtSHA256, SupportedHashAlgorithm.SHA256);
-			}
-			if (chkSHA384.IsChecked == true)
-			{
-				startTask(txtSHA384, SupportedHashAlgorithm.SHA384);
-			}
-			if (chkSHA512.IsChecked == true)
-			{
-				startTask(txtSHA512, SupportedHashAlgorithm.SHA512);
-			}
+			lblStatus.Content = "Working...";
 
-			setInitialState();
+			await Task.WhenAll(tasks);
+			lblStatus.Content = "Done";
+			prgTaskbar.ProgressState = TaskbarItemProgressState.None;
+			tasksCompleted = true;
 		}
 
-		private void startTask(TextBox textBox, SupportedHashAlgorithm hashAlgorithm)
+		private void startTask(GUIRow row)
 		{
-			setWorkingState(textBox);
-			Hash hash = new Hash(hashAlgorithm, false);
+			Hash hash = new Hash(row.HashAlgorithm, false);
 			Task<Hash> task = Task.Run(() => HashCalculation.calculateHash(hash, pthFile));
 			task.ContinueWith((t) =>
-			{
-				if(t.IsFaulted)
-				{
-					if(t.Exception.InnerException is HMACNotSupportedException)
-					{
-						textBox.Text = "HMAC not supported";
-					}
-				} else
-				{
-					textBox.Text = t.Result.HashString;
-				}
-			}, TaskScheduler.FromCurrentSynchronizationContext());
-			tasks.Add(task);
-			
-		}
-
-		private void setWorkingState(TextBox textBox)
-		{
-			textBox.Text = "Working...";
+			 {
+				 if (t.IsFaulted)
+				 {
+					 if (t.Exception.InnerException is HMACNotSupportedException)
+					 {
+						 row.TextBox.Text = "HMAC not supported";
+					 }
+				 }
+				 else
+				 {
+					 row.TextBox.Text = t.Result.HashString;
+					 row.ProgressBar.IsIndeterminate = false;
+					 prgMain.Value++;
+				 }
+			 }, TaskScheduler.FromCurrentSynchronizationContext());
+			tasks.Add(task);			
 		}
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			if(!checkTasksCompleted()) {
-				MessageBox.Show("Calculation has not yet completed.", "Calculation ongoing", MessageBoxButton.OK, MessageBoxImage.Information);
+			if(!checkTasksCompleted())
+			{
+				alertCalculationOngoing();
 				return;
 			}
 			String pthFileNoPath = Path.GetFileName(pthFile);
@@ -135,41 +153,46 @@ namespace Hash_Calculator
 			{
 				HashFile hashFile = new HashFile(saveFileDialog.FileName);
 				hashFile.addHeader(pthFile);
-				if (chkMD5.IsChecked == true)
-				{
-					hashFile.addHashline(SupportedHashAlgorithm.MD5, txtMD5.Text);
-				}
-				if (chkSHA1.IsChecked == true)
-				{
-					hashFile.addHashline(SupportedHashAlgorithm.SHA1, txtSHA1.Text);
-				}
-				if (chkSHA256.IsChecked == true)
-				{
-					hashFile.addHashline(SupportedHashAlgorithm.SHA256, txtSHA256.Text);
-				}
-				if (chkSHA384.IsChecked == true)
-				{
-					hashFile.addHashline(SupportedHashAlgorithm.SHA384, txtSHA384.Text);
-				}
-				if (chkSHA512.IsChecked == true)
-				{
-					hashFile.addHashline(SupportedHashAlgorithm.SHA512, txtSHA512.Text);
+				foreach(GUIRow row in rows) {
+					if(row.isChecked())
+					{
+						hashFile.addHashline(row.HashAlgorithm, row.TextBox.Text);
+					}
 				}
 				hashFile.closeFile();
 			}
 		}
 
+		private static void alertCalculationOngoing()
+		{
+			MessageBox.Show("Calculation has not yet completed.", "Calculation ongoing", MessageBoxButton.OK, MessageBoxImage.Information);
+		}
+
 		private bool checkTasksCompleted()
 		{
-			foreach (Task task in tasks)
+			return tasksCompleted;
+		}
+
+		private void txtCompare_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			setInitialState();
+			// Search through results
+			foreach (GUIRow row in rows)
 			{
-				if (task.Status != TaskStatus.RanToCompletion && task.Status != TaskStatus.Faulted)
+				// If found
+				if (row.TextBox.Text.Equals(txtCompare.Text))
 				{
-					return false;
+					row.TextBox.BorderThickness = thkThick;
+					row.TextBox.BorderBrush = Brushes.Green;
 				}
 			}
-			return true;
 		}
+
+		private void btnClose_Click(object sender, RoutedEventArgs e)
+		{
+			Application.Current.Shutdown();
+		}
+
 
 	}
 }

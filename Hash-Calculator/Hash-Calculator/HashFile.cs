@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Hash_Calculator
 {
-	class HashFile
+	public class HashFile
 	{
+
 		private StreamWriter writer;
 		public HashFile(String filepath)
 		{
@@ -22,7 +23,7 @@ namespace Hash_Calculator
 
 		public void addHashline(SupportedHashAlgorithm algorithm, String hash)
 		{
-			writer.WriteLine(algorithm.ToString() + ": " + hash);
+			writer.WriteLine(algorithm.ToString() + new String('\t', Constants.HASHFILE_TAB_COUNT) + hash);
 		}
 
 		public void closeFile()

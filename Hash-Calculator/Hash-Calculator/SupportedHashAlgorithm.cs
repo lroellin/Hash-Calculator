@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hash_Calculator
 {
-    enum SupportedHashAlgorithm
+    public enum SupportedHashAlgorithm
     {
 		MD5,
 		SHA1,
