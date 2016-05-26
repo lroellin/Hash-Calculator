@@ -78,7 +78,7 @@ ipch/
 *.sdf
 *.cachefile
 
-# Visual Studio profiler
+# Visual Stu§dio profiler
 *.psess
 *.vsp
 *.vspx
@@ -126,9 +126,6 @@ DocProject/Help/*.hhk
 DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
-
-# Click-Once directory
-publish/
 
 # Publish Web Output
 *.[Pp]ublish.xml
