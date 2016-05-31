@@ -29,6 +29,11 @@
                 <Separator />
                 <MenuItem x:Name="btnClose" Header="_Exit" Click="btnClose_Click" InputGestureText="ALT+F4"/>
             </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem x:Name="btnAbout" Header="_About" Click="btnAbout_Click">
+                    
+                </MenuItem>
+            </MenuItem>
         </Menu>
         <StackPanel HorizontalAlignment="Left" Height="499" Margin="10,10,0,-8" VerticalAlignment="Top" Width="772">
             <Grid Height="120" VerticalAlignment="Top" Width="auto" >
