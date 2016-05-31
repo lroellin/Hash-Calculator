@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="12*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox x:Name="chkAll" Content="" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="20"/>
+                <CheckBox x:Name="chkAll" Content="Select all" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="93"/>
                 <CheckBox x:Name="chkMD5" Content="MD5" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Height="17" IsChecked="{Binding IsChecked, ElementName=chkAll, Mode=OneWay}" Grid.Row="1" Width="46"/>
                 <TextBox x:Name="txtMD5" HorizontalAlignment="Left" Height="44" Margin="2,2,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="577" IsEnabled="{Binding IsChecked, ElementName=chkMD5}" FontFamily="Consolas" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
                 <CheckBox x:Name="chkSHA1" Content="SHA1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="17" IsChecked="{Binding IsChecked, ElementName=chkAll, Mode=OneWay}" Grid.Row="2" Width="49"/>
