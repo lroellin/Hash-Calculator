@@ -1,2 +1,6 @@
 # Hash-Calculator
-A parallel Hash Calculator in C# for .NET 4
+A multi-threaded Hash Calculator
+
+* Language: C#
+* Framework: .NET 4
+* GUI: WPF
