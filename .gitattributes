@@ -60,3 +60,7 @@ core.autocrlf = true;
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+*.manifest binary
+*.application binary
+*.deploy binary
