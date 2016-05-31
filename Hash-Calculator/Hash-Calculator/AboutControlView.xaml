@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:Gat.Controls"
 			 MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
-			 Background="LightGray"
 			 MaxWidth="500"
 			 BorderThickness="1"
 			 BorderBrush="Black"

@@ -203,7 +203,7 @@ namespace Hash_Calculator
 			about.ApplicationLogo = appBi;
 			about.PublisherLogo = cBi;
 			about.HyperlinkText = "http://www.dreami.ch/";
-			about.AdditionalNotes = "Using\nWPF About Box Copyright (c) 2014 Christoph Gattnar";
+			about.AdditionalNotes = "Using:\n(Modified) WPF About Box\nCopyright (c) 2014 Christoph Gattnar";
 			about.Show();
 
 		}
