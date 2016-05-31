@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Security.Cryptography;
 using System.IO;
 using System.Windows.Shell;
+using Gat.Controls;
 
 namespace Hash_Calculator
 {
@@ -189,13 +190,32 @@ namespace Hash_Calculator
 
 		private void btnClose_Click(object sender, RoutedEventArgs e)
 		{
-			Application.Current.Shutdown();
+			shutdown();
 		}
 
 		private void btnAbout_Click(object sender, RoutedEventArgs e)
 		{
+			BitmapImage appBi = new BitmapImage(new System.Uri("pack://application:,,,/Resources/Icon.ico"));
+			BitmapImage cBi = new BitmapImage(new System.Uri("pack://application:,,,/Resources/Dreami.png"));
+
 			About about = new About();
-			about.ShowDialog();
+			about.IsSemanticVersioning = true;
+			about.ApplicationLogo = appBi;
+			about.PublisherLogo = cBi;
+			about.HyperlinkText = "http://www.dreami.ch/";
+			about.AdditionalNotes = "Using\nWPF About Box Copyright (c) 2014 Christoph Gattnar";
+			about.Show();
+
+		}
+
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			shutdown();
+		}
+
+		private void shutdown()
+		{
+			Application.Current.Shutdown();
 		}
 	}
 }
