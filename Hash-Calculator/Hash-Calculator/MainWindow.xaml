@@ -50,7 +50,7 @@
                 <Label x:Name="lblFileOpen" Content="File" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.482,0.154"/>
                 <TextBox x:Name="txtFileOpen" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" Width="559" Grid.Column="1" IsEnabled="False" VerticalScrollBarVisibility="Disabled" />
                 <Button x:Name="btnFileOpen" Content="Open" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="73" Height="23" Click="btnFileOpen_Click" RenderTransformOrigin="0.653,1.29" Grid.Column="2"/>
-                <TextBox x:Name="txtCompare" HorizontalAlignment="Left" Height="44" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="559" IsEnabled="{Binding IsChecked, ElementName=chkSHA384}" FontFamily="Consolas" Grid.Column="1" Grid.Row="1" TextChanged="txtCompare_TextChanged"/>
+                <TextBox x:Name="txtCompare" HorizontalAlignment="Left" Height="44" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="559" FontFamily="Consolas" Grid.Column="1" Grid.Row="1" TextChanged="txtCompare_TextChanged"/>
                 <Label x:Name="lblCompare" Content="Compare" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top"/>
             </Grid>
             <Separator Height="11" Margin="0"/>

@@ -32,7 +32,20 @@ namespace Hash_Calculator
 		Thickness thkNormal = new Thickness(1);
 		Thickness thkThick = new Thickness(5, 1, 5, 1);
 
-        public MainWindow()
+		public bool TasksCompleted
+		{
+			get
+			{
+				return tasksCompleted;
+			}
+
+			set
+			{
+				tasksCompleted = value;
+			}
+		}
+
+		public MainWindow()
         {
             InitializeComponent();
 			this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
@@ -57,8 +70,16 @@ namespace Hash_Calculator
 			{
 				row.CopyButton.Tag = row.TextBox;
 				row.CopyButton.Click += new RoutedEventHandler(this.copyToClipboard);
-				row.TextBox.BorderThickness = thkNormal;
 				row.ProgressBar.IsIndeterminate = false;
+			}
+			setNormalBorder();
+		}
+
+		private void setNormalBorder()
+		{
+			foreach (GUIRow row in rows)
+			{
+				row.TextBox.BorderThickness = thkNormal;
 			}
 		}
 
@@ -88,7 +109,7 @@ namespace Hash_Calculator
 				alertCalculationOngoing();
 				return;
 			}
-			tasksCompleted = false;
+			TasksCompleted = false;
 			prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
 			pthFile = txtFileOpen.Text;
 			tasks.Clear();
@@ -111,7 +132,7 @@ namespace Hash_Calculator
 			await Task.WhenAll(tasks);
 			lblStatus.Content = "Done";
 			prgTaskbar.ProgressState = TaskbarItemProgressState.None;
-			tasksCompleted = true;
+			TasksCompleted = true;
 		}
 
 		private void startTask(GUIRow row)
@@ -170,12 +191,12 @@ namespace Hash_Calculator
 
 		private bool checkTasksCompleted()
 		{
-			return tasksCompleted;
+			return TasksCompleted;
 		}
 
 		private void txtCompare_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			setInitialState();
+			setNormalBorder();
 			// Search through results
 			foreach (GUIRow row in rows)
 			{
