@@ -28,7 +28,6 @@ namespace Hash_Calculator
 		List<Task> tasks = new List<Task>();
 		List<GUIRow> rows = new List<GUIRow>();
 		Boolean tasksCompleted = true;
-		int nrOfTasks = 0;
 		Thickness thkNormal = new Thickness(1);
 		Thickness thkThick = new Thickness(5, 1, 5, 1);
 
