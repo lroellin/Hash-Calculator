@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Hash_Calculator
+namespace Dreami.Hash_Calculator
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hash_Calculator
+namespace Dreami.Hash_Calculator
 {
 	class HashAlgorithmNotImplementedException : Exception
 	{

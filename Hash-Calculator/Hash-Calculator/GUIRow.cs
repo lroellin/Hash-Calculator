@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace Hash_Calculator
+namespace Dreami.Hash_Calculator
 {
 	public class GUIRow
 	{

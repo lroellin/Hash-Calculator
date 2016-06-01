@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hash_Calculator
+namespace Dreami.Hash_Calculator
 {
 	static class HashCalculation
 	{

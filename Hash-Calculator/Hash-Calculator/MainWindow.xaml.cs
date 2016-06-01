@@ -17,7 +17,7 @@ using System.IO;
 using System.Windows.Shell;
 using Gat.Controls;
 
-namespace Hash_Calculator
+namespace Dreami.Hash_Calculator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -25,7 +25,6 @@ namespace Hash_Calculator
     public partial class MainWindow : Window
     {
 
-		string pthFile;
 		List<Task> tasks = new List<Task>();
 		List<GUIRow> rows = new List<GUIRow>();
 		Boolean tasksCompleted = true;
@@ -73,6 +72,8 @@ namespace Hash_Calculator
 				row.ProgressBar.IsIndeterminate = false;
 			}
 			setNormalBorder();
+			prgMain.Maximum = 1;
+			prgMain.Value = 0;
 		}
 
 		private void setNormalBorder()
@@ -107,39 +108,58 @@ namespace Hash_Calculator
 		{
 			if (!checkTasksCompleted())
 			{
-				alertCalculationOngoing();
+				AlertManager.calculationOngoing();
 				return;
 			}
-			TasksCompleted = false;
-			prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
-			pthFile = txtFileOpen.Text;
-			tasks.Clear();
-			btnSave.IsEnabled = true;
-			lblStatus.Content = "Starting threads...";
-			prgMain.Maximum = 0;
-			prgMain.Value = 0;
-			foreach (GUIRow row in rows)
+			Stream stream = null;
+			try
 			{
-				if(row.isChecked())
+				TasksCompleted = false;
+				prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
+				tasks.Clear();
+				btnSave.IsEnabled = true;
+				lblStatus.Content = "Starting threads...";
+				prgMain.Maximum = 0;
+				prgMain.Value = 0;
+				stream = File.OpenRead(txtFileOpen.Text);
+				stream.Close();
+				foreach (GUIRow row in rows)
 				{
-					row.ProgressBar.IsIndeterminate = true;
-					row.TextBox.Text = "";
-					prgMain.Maximum++;
-					startTask(row);
+					if (row.isChecked())
+					{
+						row.ProgressBar.IsIndeterminate = true;
+						row.TextBox.Text = "";
+						prgMain.Maximum++;
+						startTask(row);
+					}
 				}
-			}
-			lblStatus.Content = "Working...";
+				lblStatus.Content = "Working...";
 
-			await Task.WhenAll(tasks);
-			lblStatus.Content = "Done";
-			prgTaskbar.ProgressState = TaskbarItemProgressState.None;
-			TasksCompleted = true;
+				await Task.WhenAll(tasks);
+			}
+			catch (IOException error)
+			{
+				AlertManager.readException(error, txtFileOpen.Text);
+			}
+			finally
+			{
+				lblStatus.Content = "Done";
+				prgTaskbar.ProgressState = TaskbarItemProgressState.None;
+				TasksCompleted = true;
+				prgMain.Maximum = 1;
+				prgMain.Value = 0;
+				if(stream != null)
+				{
+					stream.Close();
+				}
+				
+			}
 		}
 
 		private void startTask(GUIRow row)
 		{
 			Hash hash = new Hash(row.HashAlgorithm, false);
-			Task<Hash> task = Task.Run(() => HashCalculation.calculateHash(hash, pthFile));
+			Task<Hash> task = Task.Run(() => HashCalculation.calculateHash(hash, txtFileOpen.Text));
 			task.ContinueWith((t) =>
 			 {
 				 if (t.IsFaulted)
@@ -159,36 +179,7 @@ namespace Hash_Calculator
 			tasks.Add(task);			
 		}
 
-		private void btnSave_Click(object sender, RoutedEventArgs e)
-		{
-			if(!checkTasksCompleted())
-			{
-				alertCalculationOngoing();
-				return;
-			}
-			String pthFileNoPath = Path.GetFileName(pthFile);
-			SaveFileDialog saveFileDialog = new SaveFileDialog();
-			saveFileDialog.FileName = "Hash-" + pthFileNoPath + ".txt";
-			saveFileDialog.Filter = "Text files (*.txt) | *.txt | All files(*.*) | *.*";
-			saveFileDialog.ShowDialog();
-			if(saveFileDialog.FileName != "")
-			{
-				HashFile hashFile = new HashFile(saveFileDialog.FileName);
-				hashFile.addHeader(pthFile);
-				foreach(GUIRow row in rows) {
-					if(row.isChecked())
-					{
-						hashFile.addHashline(row.HashAlgorithm, row.TextBox.Text);
-					}
-				}
-				hashFile.closeFile();
-			}
-		}
-
-		private static void alertCalculationOngoing()
-		{
-			MessageBox.Show("Calculation has not yet completed.", "Calculation ongoing", MessageBoxButton.OK, MessageBoxImage.Information);
-		}
+		
 
 		private bool checkTasksCompleted()
 		{
@@ -210,10 +201,33 @@ namespace Hash_Calculator
 			}
 		}
 
-		private void btnClose_Click(object sender, RoutedEventArgs e)
+		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			shutdown();
+			if (!checkTasksCompleted())
+			{
+				AlertManager.calculationOngoing();
+				return;
+			}
+			String pthFileNoPath = Path.GetFileName(txtFileOpen.Text);
+			SaveFileDialog saveFileDialog = new SaveFileDialog();
+			saveFileDialog.FileName = "Hash-" + pthFileNoPath + ".txt";
+			saveFileDialog.Filter = "Text files (*.txt) | *.txt | All files(*.*) | *.*";
+			saveFileDialog.ShowDialog();
+			if (saveFileDialog.FileName != "")
+			{
+				HashFile hashFile = new HashFile(saveFileDialog.FileName);
+				hashFile.addHeader(txtFileOpen.Text);
+				foreach (GUIRow row in rows)
+				{
+					if (row.isChecked())
+					{
+						hashFile.addHashline(row.HashAlgorithm, row.TextBox.Text);
+					}
+				}
+				hashFile.closeFile();
+			}
 		}
+
 
 		private void btnAbout_Click(object sender, RoutedEventArgs e)
 		{
@@ -230,6 +244,10 @@ namespace Hash_Calculator
 
 		}
 
+		private void btnClose_Click(object sender, RoutedEventArgs e)
+		{
+			shutdown();
+		}
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			shutdown();
