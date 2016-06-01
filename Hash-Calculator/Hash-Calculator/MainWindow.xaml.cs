@@ -24,7 +24,7 @@ namespace Dreami.Hash_Calculator
     /// </summary>
     public partial class MainWindow : Window
     {
-
+		String file;
 		List<Task> tasks = new List<Task>();
 		List<GUIRow> rows = new List<GUIRow>();
 		Boolean tasksCompleted = true;
@@ -112,15 +112,17 @@ namespace Dreami.Hash_Calculator
 				return;
 			}
 			Stream stream = null;
+			TasksCompleted = false;
+			file = txtFileOpen.Text;
+			prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
+			tasks.Clear();
+			btnSave.IsEnabled = true;
+			lblStatus.Content = "Starting threads...";
+			prgMain.Maximum = 0;
+			prgMain.Value = 0;
 			try
 			{
-				TasksCompleted = false;
-				prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
-				tasks.Clear();
-				btnSave.IsEnabled = true;
-				lblStatus.Content = "Starting threads...";
-				prgMain.Maximum = 0;
-				prgMain.Value = 0;
+				
 				stream = File.OpenRead(txtFileOpen.Text);
 				stream.Close();
 				foreach (GUIRow row in rows)
@@ -159,7 +161,7 @@ namespace Dreami.Hash_Calculator
 		private void startTask(GUIRow row)
 		{
 			Hash hash = new Hash(row.HashAlgorithm, false);
-			Task<Hash> task = Task.Run(() => HashCalculation.calculateHash(hash, txtFileOpen.Text));
+			Task<Hash> task = Task.Run(() => HashCalculation.calculateHash(hash, file));
 			task.ContinueWith((t) =>
 			 {
 				 if (t.IsFaulted)
