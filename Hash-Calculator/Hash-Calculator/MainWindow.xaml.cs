@@ -79,7 +79,8 @@ namespace Hash_Calculator
 		{
 			foreach (GUIRow row in rows)
 			{
-				row.TextBox.BorderThickness = thkNormal;
+				row.TextBox.ClearValue(TextBox.BorderThicknessProperty);
+				row.TextBox.ClearValue(TextBox.BorderBrushProperty);
 			}
 		}
 
