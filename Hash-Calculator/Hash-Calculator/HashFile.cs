@@ -7,28 +7,20 @@ using System.Threading.Tasks;
 
 namespace Dreami.Hash_Calculator
 {
-	public class HashFile
+	static class HashFile
 	{
 
-		private StreamWriter writer;
-		public HashFile(String filepath)
+		public static void writeHashFile(Hash hash, String filePath)
 		{
-			this.writer = new StreamWriter(filepath, false);
+			String hashFile = HashFile.hashFilePath(hash, filePath);
+			// Format: ea912a289186e5120eac3a722fe23c2f *apr-1.5.2-win32-src.zip
+			String line = hash.HashString.ToLower() + " *" + filePath;
+			File.WriteAllText(hashFile, line);
 		}
 
-		public void addHeader(String file)
+		public static String hashFilePath(Hash hash, String filePath)
 		{
-			writer.WriteLine("File: " + file);
-		}
-
-		public void addHashline(SupportedHashAlgorithm algorithm, String hash)
-		{
-			writer.WriteLine(algorithm.ToString() + new String('\t', Constants.HASHFILE_TAB_COUNT) + hash);
-		}
-
-		public void closeFile()
-		{
-			writer.Close();
+			return filePath + "." + (hash.HashAlgorithm.ToString().ToLower());
 		}
 
 	}

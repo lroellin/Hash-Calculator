@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dreami.Hash_Calculator
 {
-    class Hash
+    public class Hash
     {
         private byte[] hashValue;
         private SupportedHashAlgorithm hashAlgorithm;

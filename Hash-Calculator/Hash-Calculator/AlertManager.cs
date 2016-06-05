@@ -14,9 +14,14 @@ namespace Dreami.Hash_Calculator
 			MessageBox.Show("Calculation has not yet completed.", "Calculation ongoing", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
-		public static void readException(Exception e, String path)
+		public static void readException(Exception e)
 		{
-			MessageBox.Show(e.Message, "File not readable", MessageBoxButton.OK, MessageBoxImage.Warning);
+			MessageBox.Show(e.Message, "Could not read file", MessageBoxButton.OK, MessageBoxImage.Warning);
+		}
+
+		public static void saveException(Exception e)
+		{
+			MessageBox.Show(e.Message, "Could not save file", MessageBoxButton.OK, MessageBoxImage.Warning);
 		}
 	}
 }

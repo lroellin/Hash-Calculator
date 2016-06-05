@@ -14,14 +14,17 @@ namespace Dreami.Hash_Calculator
 		private TextBox textBox;
 		private Button copyButton;
 		private ProgressBar progressBar;
+		private Image hashCheckImage;
+		private Hash hash;
 
-		public GUIRow(SupportedHashAlgorithm hashAlgorithm, CheckBox checkBox, TextBox textBox, Button copyButton, ProgressBar progressBar)
+		public GUIRow(SupportedHashAlgorithm hashAlgorithm, CheckBox checkBox, TextBox textBox, Button copyButton, ProgressBar progressBar, Image hashCheckImage)
 		{ 
 			this.hashAlgorithm = hashAlgorithm;
 			this.CheckBox = checkBox;
 			this.TextBox = textBox;
 			this.CopyButton = copyButton;
 			this.progressBar = progressBar;
+			this.HashCheckImage = hashCheckImage;
 		}
 
 		public SupportedHashAlgorithm HashAlgorithm
@@ -86,6 +89,32 @@ namespace Dreami.Hash_Calculator
 			set
 			{
 				progressBar = value;
+			}
+		}
+
+		public Image HashCheckImage
+		{
+			get
+			{
+				return hashCheckImage;
+			}
+
+			set
+			{
+				hashCheckImage = value;
+			}
+		}
+
+		public Hash Hash
+		{
+			get
+			{
+				return hash;
+			}
+
+			set
+			{
+				hash = value;
 			}
 		}
 

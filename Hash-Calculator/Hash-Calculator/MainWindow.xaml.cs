@@ -1,28 +1,21 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Security.Cryptography;
 using System.IO;
 using System.Windows.Shell;
 using Gat.Controls;
 
 namespace Dreami.Hash_Calculator
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
     {
 		String file;
 		List<Task> tasks = new List<Task>();
@@ -30,6 +23,7 @@ namespace Dreami.Hash_Calculator
 		Boolean tasksCompleted = true;
 		Thickness thkNormal = new Thickness(1);
 		Thickness thkThick = new Thickness(5, 1, 5, 1);
+		private String infHashFileFormats = "- filename.md5\n- filename.sha1\n- filename.sha256\n- filename.sha384\n- filename.sha512";
 
 		public bool TasksCompleted
 		{
@@ -53,11 +47,12 @@ namespace Dreami.Hash_Calculator
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			rows.Add(new GUIRow(SupportedHashAlgorithm.MD5, chkMD5, txtMD5, cpyMD5, prgMD5));
-			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA1, chkSHA1, txtSHA1, cpySHA1, prgSHA1));
-			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA256, chkSHA256, txtSHA256, cpySHA256, prgSHA256));
-			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384));
-			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.MD5, chkMD5, txtMD5, cpyMD5, prgMD5, imgHCMD5));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA1, chkSHA1, txtSHA1, cpySHA1, prgSHA1, imgHCSHA1));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA256, chkSHA256, txtSHA256, cpySHA256, prgSHA256, imgHCSHA256));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384, imgHCSHA384));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512, imgHCSHA512));
+			chkHashCheck.ToolTip += infHashFileFormats;
 			setInitialState();
 		}
 
@@ -70,10 +65,13 @@ namespace Dreami.Hash_Calculator
 				row.CopyButton.Tag = row.TextBox;
 				row.CopyButton.Click += new RoutedEventHandler(this.copyToClipboard);
 				row.ProgressBar.IsIndeterminate = false;
+				if(row.HashCheckImage != null)
+				{
+					row.HashCheckImage.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/Lock.png"));
+					row.HashCheckImage.ClearValue(Image.ToolTipProperty);
+				}
 			}
 			setNormalBorder();
-			prgMain.Maximum = 1;
-			prgMain.Value = 0;
 		}
 
 		private void setNormalBorder()
@@ -95,7 +93,8 @@ namespace Dreami.Hash_Calculator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 			openFileDialog.CheckFileExists = true;
-			openFileDialog.CheckPathExists = true; 
+			openFileDialog.CheckPathExists = true;
+			openFileDialog.ValidateNames = true;
 
             if(openFileDialog.ShowDialog() == true)
             {
@@ -111,45 +110,43 @@ namespace Dreami.Hash_Calculator
 				AlertManager.calculationOngoing();
 				return;
 			}
+			// Initialization
 			Stream stream = null;
 			TasksCompleted = false;
 			file = txtFileOpen.Text;
 			prgTaskbar.ProgressState = TaskbarItemProgressState.Indeterminate;
 			tasks.Clear();
+			// GUI Tasks
 			btnSave.IsEnabled = true;
 			lblStatus.Content = "Starting threads...";
-			prgMain.Maximum = 0;
-			prgMain.Value = 0;
 			try
 			{
-				
+				// Check if stream can be opened
 				stream = File.OpenRead(txtFileOpen.Text);
 				stream.Close();
+				// Start task for each row
 				foreach (GUIRow row in rows)
 				{
 					if (row.isChecked())
 					{
-						row.ProgressBar.IsIndeterminate = true;
 						row.TextBox.Text = "";
-						prgMain.Maximum++;
 						startTask(row);
 					}
 				}
 				lblStatus.Content = "Working...";
 
-				await Task.WhenAll(tasks);
+				// Await all tasks
+				await TaskEx.WhenAll(tasks);
 			}
-			catch (IOException error)
+			catch (Exception error)
 			{
-				AlertManager.readException(error, txtFileOpen.Text);
+				AlertManager.readException(error);
 			}
 			finally
 			{
-				lblStatus.Content = "Done";
+				lblStatus.Content = "Calculation done";
 				prgTaskbar.ProgressState = TaskbarItemProgressState.None;
 				TasksCompleted = true;
-				prgMain.Maximum = 1;
-				prgMain.Value = 0;
 				if(stream != null)
 				{
 					stream.Close();
@@ -160,8 +157,10 @@ namespace Dreami.Hash_Calculator
 
 		private void startTask(GUIRow row)
 		{
+			DateTime start = DateTime.UtcNow;
+			row.ProgressBar.IsIndeterminate = true;
 			Hash hash = new Hash(row.HashAlgorithm, false);
-			Task<Hash> task = Task.Run(() => HashCalculation.calculateHash(hash, file));
+			Task<Hash> task = Task.Factory.StartNew(() => HashCalculation.calculateHash(hash, file));
 			task.ContinueWith((t) =>
 			 {
 				 if (t.IsFaulted)
@@ -173,9 +172,36 @@ namespace Dreami.Hash_Calculator
 				 }
 				 else
 				 {
+					 DateTime end = DateTime.UtcNow;
 					 row.TextBox.Text = t.Result.HashString;
+					 row.Hash = t.Result;
 					 row.ProgressBar.IsIndeterminate = false;
-					 prgMain.Value++;
+					 row.ProgressBar.Maximum = 0;
+					 row.ProgressBar.ToolTip = Math.Round((end - start).TotalSeconds, 2) + "s";
+					 if(chkHashCheck.IsChecked == true && row.HashCheckImage != null)
+					 {
+						 try
+						 {
+							 if(HashCalculation.checkHash(t.Result, file))
+							 {
+								 row.HashCheckImage.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/LockCorrect.png"));
+								 row.HashCheckImage.ToolTip = "Correct";
+							 } else
+							 {
+								 row.HashCheckImage.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/LockIncorrect.png"));
+								 row.HashCheckImage.ToolTip = "Incorrect";
+							 }
+						 }
+						 catch (HashCheckException e)
+						 {
+							 row.HashCheckImage.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/LockUnknown.png"));
+							 row.HashCheckImage.ToolTip = e.Message;
+						 }
+						 finally
+						 {
+
+						 }
+					 }
 				 }
 			 }, TaskScheduler.FromCurrentSynchronizationContext());
 			tasks.Add(task);			
@@ -191,11 +217,12 @@ namespace Dreami.Hash_Calculator
 		private void txtCompare_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			setNormalBorder();
+
 			// Search through results
 			foreach (GUIRow row in rows)
 			{
 				// If found
-				if (row.TextBox.Text.Equals(txtCompare.Text))
+				if (row.TextBox.Text.Equals(txtCompare.Text.ToUpper()))
 				{
 					row.TextBox.BorderThickness = thkThick;
 					row.TextBox.BorderBrush = Brushes.Green;
@@ -210,24 +237,27 @@ namespace Dreami.Hash_Calculator
 				AlertManager.calculationOngoing();
 				return;
 			}
-			String pthFileNoPath = Path.GetFileName(txtFileOpen.Text);
-			SaveFileDialog saveFileDialog = new SaveFileDialog();
-			saveFileDialog.FileName = "Hash-" + pthFileNoPath + ".txt";
-			saveFileDialog.Filter = "Text files (*.txt) | *.txt | All files(*.*) | *.*";
-			saveFileDialog.ShowDialog();
-			if (saveFileDialog.FileName != "")
+			MessageBoxResult result =  MessageBox.Show("This will create or overwrite the following files:\n" + infHashFileFormats + "\n\nContinue?", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.Cancel);
+			if(result == MessageBoxResult.OK)
 			{
-				HashFile hashFile = new HashFile(saveFileDialog.FileName);
-				hashFile.addHeader(txtFileOpen.Text);
-				foreach (GUIRow row in rows)
+				try
 				{
-					if (row.isChecked())
+					foreach (GUIRow row in rows)
 					{
-						hashFile.addHashline(row.HashAlgorithm, row.TextBox.Text);
+						if (row.isChecked())
+						{
+							HashFile.writeHashFile(row.Hash, file);
+						}
 					}
 				}
-				hashFile.closeFile();
+				catch (Exception error)
+				{
+					AlertManager.saveException(error);
+				}
+
+				lblStatus.Content = "Saved";
 			}
+			
 		}
 
 
