@@ -1,5 +1,5 @@
 # Hash-Calculator
-A multi-threaded Hash Calculator
+A multi-threaded, parallel Hash Calculator
 
 * Language: C#
 * Framework: .NET 4
