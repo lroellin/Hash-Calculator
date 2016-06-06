@@ -47,6 +47,11 @@ namespace Dreami.Hash_Calculator
 						hash.HashValue = SHA512.Create().ComputeHash(stream);
 						break;
 					}
+					case SupportedHashAlgorithm.RIPEMD160:
+					{
+						hash.HashValue = RIPEMD160.Create().ComputeHash(stream);
+						break;
+					}
 					default:
 					{
 						throw new HashAlgorithmNotImplementedException();

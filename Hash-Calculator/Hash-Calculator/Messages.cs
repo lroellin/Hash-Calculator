@@ -9,7 +9,7 @@ namespace Dreami.Hash_Calculator
 {
 	class Messages
 	{
-		public static readonly String HASHFILE_FORMATS = "- filename.md5\n- filename.sha1\n- filename.sha256\n- filename.sha384\n- filename.sha512";
+		public static readonly String HASHFILE_FORMATS = "- filename.md5\n- filename.sha1\n- filename.sha256\n- filename.sha384\n- filename.sha512\n- filename.ripemd160";
 		public static readonly String USERINPUT_NORMALIZATION = "- Capitalized\n- Alphanumeric only";
 
 		public static void CalculationOngoing()

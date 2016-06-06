@@ -13,6 +13,8 @@ namespace Dreami.Hash_Calculator
 		SHA1,
 		SHA256,
 		SHA384,
-		SHA512
+		SHA512,
+		RIPEMD160,
+		CRC32
     }
 }

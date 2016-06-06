@@ -11,6 +11,7 @@ namespace Dreami.Hash_Calculator
         private byte[] hashValue;
         private SupportedHashAlgorithm hashAlgorithm;
 		private Boolean hmac;
+		private String hashString;
 
         public Hash(SupportedHashAlgorithm hashAlgorithm, bool? hmac)
         {
@@ -49,6 +50,10 @@ namespace Dreami.Hash_Calculator
 			get
 			{
 				return BitConverter.ToString(HashValue).Replace("-", string.Empty);
+			}
+			set
+			{
+				
 			}
         }
 

@@ -51,6 +51,7 @@ namespace Dreami.Hash_Calculator
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA256, chkSHA256, txtSHA256, cpySHA256, prgSHA256, imgHCSHA256));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384, imgHCSHA384));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512, imgHCSHA512));
+			rows.Add(new GUIRow(SupportedHashAlgorithm.RIPEMD160, chkRIPEMD160, txtRIPEMD160, cpyRIPEMD160, prgRIPEMD160, imgHCRIPEMD160));
 			chkHashCheck.ToolTip += Messages.HASHFILE_FORMATS;
 			imgCompareTip.ToolTip += Messages.USERINPUT_NORMALIZATION;
 			SetInitialState();
