@@ -254,6 +254,7 @@ namespace Dreami.Hash_Calculator
 							HashFile.WriteHashFile(row.Hash, file);
 						}
 					}
+					lblStatus.Content = "Save done";
 				}
 				catch (Exception error)
 				{
@@ -261,7 +262,6 @@ namespace Dreami.Hash_Calculator
 					lblStatus.Content = "Save aborted";
 				}
 
-				lblStatus.Content = "Save done";
 			} else
 			{
 				lblStatus.Content = "Save canceled";

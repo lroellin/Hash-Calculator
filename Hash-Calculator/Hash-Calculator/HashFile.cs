@@ -14,7 +14,7 @@ namespace Dreami.Hash_Calculator
 		{
 			String hashFile = HashFile.HashFilePath(hash, filePath);
 			// Format: ea912a289186e5120eac3a722fe23c2f *apr-1.5.2-win32-src.zip
-			String line = hash.HashString.ToLower() + " *" + filePath;
+			String line = hash.HashString.ToLower() + " *" + filePath + "\n";
 			File.WriteAllText(hashFile, line);
 		}
 
