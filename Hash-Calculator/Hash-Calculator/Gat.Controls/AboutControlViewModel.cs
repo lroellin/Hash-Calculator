@@ -44,8 +44,8 @@ namespace Gat.Controls
 		private string _AdditionalNotes;
 		private string _HyperlinkText;
 		private Uri _Hyperlink;
-        private string _Publisher;
-        private bool _isSemanticVersioning;
+		private string _Publisher;
+		private bool _isSemanticVersioning;
 
 		#endregion
 
@@ -66,12 +66,12 @@ namespace Gat.Controls
 			Assembly assembly = Assembly.GetEntryAssembly();
 			Version = assembly.GetName().Version.ToString();
 			Title = assembly.GetName().Name;
-			
+
 			AssemblyCopyrightAttribute copyright = Attribute.GetCustomAttribute(assembly, typeof(AssemblyCopyrightAttribute)) as AssemblyCopyrightAttribute;
 			AssemblyDescriptionAttribute description = Attribute.GetCustomAttribute(assembly, typeof(AssemblyDescriptionAttribute)) as AssemblyDescriptionAttribute;
 			AssemblyCompanyAttribute company = Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute)) as AssemblyCompanyAttribute;
 
-            Copyright = copyright.Copyright;
+			Copyright = copyright.Copyright;
 			Description = description.Description;
 			Publisher = company.Company;
 
@@ -94,7 +94,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_ApplicationLogo != value)
+				if (_ApplicationLogo != value)
 				{
 					_ApplicationLogo = value;
 					OnPropertyChanged("ApplicationLogo");
@@ -114,7 +114,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_Title != value)
+				if (_Title != value)
 				{
 					_Title = value;
 					OnPropertyChanged("Title");
@@ -134,7 +134,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_Description != value)
+				if (_Description != value)
 				{
 					_Description = value;
 					OnPropertyChanged("Description");
@@ -142,23 +142,23 @@ namespace Gat.Controls
 			}
 		}
 
-        /// <summary>
-        /// Gets or sets if Semantic Versioning is used.
-        /// </summary>
-        /// <see cref="http://semver.org/"/>
-        /// <value>The bool that indicats whether Semantic Versioning is used.</value>
-        public bool IsSemanticVersioning
-        {
-            get
-            {
-                return _isSemanticVersioning;
-            }
-            set
-            {
-                _isSemanticVersioning = value;
-                OnPropertyChanged("Version");
-            }
-        }
+		/// <summary>
+		/// Gets or sets if Semantic Versioning is used.
+		/// </summary>
+		/// <see cref="http://semver.org/"/>
+		/// <value>The bool that indicats whether Semantic Versioning is used.</value>
+		public bool IsSemanticVersioning
+		{
+			get
+			{
+				return _isSemanticVersioning;
+			}
+			set
+			{
+				_isSemanticVersioning = value;
+				OnPropertyChanged("Version");
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the application version.
@@ -168,18 +168,18 @@ namespace Gat.Controls
 		{
 			get
 			{
-                if (IsSemanticVersioning)
-                {
-                    var tmp = _Version.Split('.');
-                    var version = string.Format("{0}.{1}.{2}", tmp[0], tmp[1], tmp[2]);
-                    return version;
-                }
+				if (IsSemanticVersioning)
+				{
+					var tmp = _Version.Split('.');
+					var version = string.Format("{0}.{1}.{2}", tmp[0], tmp[1], tmp[2]);
+					return version;
+				}
 
 				return _Version;
 			}
 			set
 			{
-				if(_Version != value)
+				if (_Version != value)
 				{
 					_Version = value;
 					OnPropertyChanged("Version");
@@ -199,7 +199,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_PublisherLogo != value)
+				if (_PublisherLogo != value)
 				{
 					_PublisherLogo = value;
 					OnPropertyChanged("PublisherLogo");
@@ -219,7 +219,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_Publisher != value)
+				if (_Publisher != value)
 				{
 					_Publisher = value;
 					OnPropertyChanged("Publisher");
@@ -239,7 +239,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_Copyright != value)
+				if (_Copyright != value)
 				{
 					_Copyright = value;
 					OnPropertyChanged("Copyright");
@@ -279,7 +279,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_Hyperlink != value)
+				if (_Hyperlink != value)
 				{
 					_Hyperlink = value;
 					OnPropertyChanged("Hyperlink");
@@ -299,7 +299,7 @@ namespace Gat.Controls
 			}
 			set
 			{
-				if(_AdditionalNotes != value)
+				if (_AdditionalNotes != value)
 				{
 					_AdditionalNotes = value;
 					OnPropertyChanged("AdditionalNotes");
@@ -327,7 +327,7 @@ namespace Gat.Controls
 		protected virtual void OnPropertyChanged(string propertyName)
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
-			if(handler != null)
+			if (handler != null)
 			{
 				PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
 				handler(this, e);

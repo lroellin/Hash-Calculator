@@ -64,7 +64,7 @@ namespace Dreami.Hash_Calculator
 				String fileToCheck = HashFile.hashFilePath(hash, filePath);
 				stream = new StreamReader(fileToCheck);
 				String line = stream.ReadLine();
-				String hashPart = line.Split(' ')[0].ToUpper();
+				String hashPart = UserInput.normalize(line.Split(' ')[0]);
 				return hashPart.Equals(hash.HashString);
 			}
 			catch (Exception e)

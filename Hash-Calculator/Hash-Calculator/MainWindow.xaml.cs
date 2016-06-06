@@ -23,7 +23,6 @@ namespace Dreami.Hash_Calculator
 		Boolean tasksCompleted = true;
 		Thickness thkNormal = new Thickness(1);
 		Thickness thkThick = new Thickness(5, 1, 5, 1);
-		private String infHashFileFormats = "- filename.md5\n- filename.sha1\n- filename.sha256\n- filename.sha384\n- filename.sha512";
 
 		public bool TasksCompleted
 		{
@@ -52,7 +51,7 @@ namespace Dreami.Hash_Calculator
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA256, chkSHA256, txtSHA256, cpySHA256, prgSHA256, imgHCSHA256));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384, imgHCSHA384));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512, imgHCSHA512));
-			chkHashCheck.ToolTip += infHashFileFormats;
+			chkHashCheck.ToolTip += Messages.infHashFileFormats;
 			setInitialState();
 		}
 
@@ -63,8 +62,10 @@ namespace Dreami.Hash_Calculator
 			foreach (GUIRow row in rows)
 			{
 				row.CopyButton.Tag = row.TextBox;
+				row.TextBox.Text = "";
 				row.CopyButton.Click += new RoutedEventHandler(this.copyToClipboard);
 				row.ProgressBar.IsIndeterminate = false;
+				row.ProgressBar.Maximum = 1;
 				if(row.HashCheckImage != null)
 				{
 					row.HashCheckImage.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/Lock.png"));
@@ -98,6 +99,7 @@ namespace Dreami.Hash_Calculator
 
             if(openFileDialog.ShowDialog() == true)
             {
+				setInitialState();
                 txtFileOpen.Text = openFileDialog.FileName;
 				btnCalculate.IsEnabled = true;
 			}
@@ -107,7 +109,7 @@ namespace Dreami.Hash_Calculator
 		{
 			if (!checkTasksCompleted())
 			{
-				AlertManager.calculationOngoing();
+				Messages.calculationOngoing();
 				return;
 			}
 			// Initialization
@@ -140,7 +142,7 @@ namespace Dreami.Hash_Calculator
 			}
 			catch (Exception error)
 			{
-				AlertManager.readException(error);
+				Messages.readException(error);
 			}
 			finally
 			{
@@ -177,7 +179,9 @@ namespace Dreami.Hash_Calculator
 					 row.Hash = t.Result;
 					 row.ProgressBar.IsIndeterminate = false;
 					 row.ProgressBar.Maximum = 0;
-					 row.ProgressBar.ToolTip = Math.Round((end - start).TotalSeconds, 2) + "s";
+					 TimeSpan duration = end - start;
+					 
+					 row.ProgressBar.ToolTip = Math.Round(duration.TotalSeconds, 2) + "s (" + duration.ToString("g") + ")";
 					 if(chkHashCheck.IsChecked == true && row.HashCheckImage != null)
 					 {
 						 try
@@ -222,7 +226,7 @@ namespace Dreami.Hash_Calculator
 			foreach (GUIRow row in rows)
 			{
 				// If found
-				if (row.TextBox.Text.Equals(txtCompare.Text.ToUpper()))
+				if (row.TextBox.Text.Equals(UserInput.normalize(txtCompare.Text))) 
 				{
 					row.TextBox.BorderThickness = thkThick;
 					row.TextBox.BorderBrush = Brushes.Green;
@@ -234,11 +238,11 @@ namespace Dreami.Hash_Calculator
 		{
 			if (!checkTasksCompleted())
 			{
-				AlertManager.calculationOngoing();
+				Messages.calculationOngoing();
 				return;
 			}
-			MessageBoxResult result =  MessageBox.Show("This will create or overwrite the following files:\n" + infHashFileFormats + "\n\nContinue?", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.Cancel);
-			if(result == MessageBoxResult.OK)
+			MessageBoxResult result = Messages.saveConfirmation();
+			if (result == MessageBoxResult.OK)
 			{
 				try
 				{
@@ -252,14 +256,17 @@ namespace Dreami.Hash_Calculator
 				}
 				catch (Exception error)
 				{
-					AlertManager.saveException(error);
+					Messages.saveException(error);
+					lblStatus.Content = "Save aborted";
 				}
 
-				lblStatus.Content = "Saved";
+				lblStatus.Content = "Save done";
+			} else
+			{
+				lblStatus.Content = "Save canceled";
 			}
-			
-		}
 
+		}
 
 		private void btnAbout_Click(object sender, RoutedEventArgs e)
 		{

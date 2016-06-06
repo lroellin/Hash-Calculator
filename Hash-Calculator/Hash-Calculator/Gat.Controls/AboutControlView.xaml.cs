@@ -49,10 +49,10 @@ namespace Gat.Controls
 
 		private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs eventArgs)
 		{
-			if(eventArgs.ChangedButton == MouseButton.Left)
+			if (eventArgs.ChangedButton == MouseButton.Left)
 			{
 				Window parent = Parent as Window;
-				if(parent != null)
+				if (parent != null)
 				{
 					parent.DragMove();
 				}

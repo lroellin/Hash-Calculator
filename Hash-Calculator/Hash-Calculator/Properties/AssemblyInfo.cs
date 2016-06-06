@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Hash-Calculator")]
 [assembly: AssemblyDescription("A multi-threaded Hash Calculator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Dreami.ch")]
+[assembly: AssemblyCompany("Lukas Röllin")]
 [assembly: AssemblyProduct("Hash-Calculator")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.4.0.0")]
-[assembly: AssemblyFileVersion("1.4.0.0")]
+[assembly: AssemblyVersion("1.4.1.0")]
+[assembly: AssemblyFileVersion("1.4.1.0")]
