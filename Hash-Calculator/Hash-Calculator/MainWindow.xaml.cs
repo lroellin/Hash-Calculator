@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Windows.Shell;
 using Gat.Controls;
+using System.Media;
 
 namespace Dreami.Hash_Calculator
 {
@@ -141,6 +142,10 @@ namespace Dreami.Hash_Calculator
 
 				// Await all tasks
 				await TaskEx.WhenAll(tasks);
+				if(Properties.Settings.Default.PlaySoundWhenDone)
+				{
+					SystemSounds.Asterisk.Play();
+				}
 			}
 			catch (Exception error)
 			{
@@ -212,8 +217,6 @@ namespace Dreami.Hash_Calculator
 			 }, TaskScheduler.FromCurrentSynchronizationContext());
 			tasks.Add(task);			
 		}
-
-		
 
 		private bool CheckTasksCompleted()
 		{
@@ -292,6 +295,13 @@ namespace Dreami.Hash_Calculator
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			Shutdown();
+		}
+
+		private void btnSettings_Click(object sender, RoutedEventArgs e)
+		{
+			Window settings = new Settings();
+			settings.Owner = this;
+			settings.ShowDialog();
 		}
 
 		private void Shutdown()

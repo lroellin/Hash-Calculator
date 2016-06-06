@@ -1,0 +1,28 @@
+﻿<Window x:Class="Dreami.Hash_Calculator.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hash_Calculator"
+        mc:Ignorable="d"
+        Title="Settings" SizeToContent="Height" Width="300">
+    <StackPanel HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="70">
+        <CheckBox x:Name="chkPlaySound" Content="Play sound when done" />
+        <Separator Height="18" />
+        <Grid HorizontalAlignment="Right" Width="280">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button x:Name="btnOk" Width="50" Height="25" Content="OK" Grid.Column="0" Click="btnOk_Click" Margin="10,0"/>
+            <Button x:Name="btnCancel" Width="50" Height="25" Content="Cancel" Grid.Row="1" Grid.Column="1" Click="btnCancel_Click"/>
+            <Button x:Name="btnApply" Width="50" Height="25" Content="Apply" Grid.Row="1" Grid.Column="2" Click="btnApply_Click"/>
+            <Button x:Name="btnDefault" Width="50" Height="25" Content="Default" Grid.Row="1" Grid.Column="3" Click="btnDefault_Click"/>
+        </Grid>
+    </StackPanel>
+</Window>

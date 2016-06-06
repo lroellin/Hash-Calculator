@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hash_Calculator.Properties {
+namespace Dreami.Hash_Calculator.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -20,6 +20,18 @@ namespace Hash_Calculator.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PlaySoundWhenDone {
+            get {
+                return ((bool)(this["PlaySoundWhenDone"]));
+            }
+            set {
+                this["PlaySoundWhenDone"] = value;
             }
         }
     }
