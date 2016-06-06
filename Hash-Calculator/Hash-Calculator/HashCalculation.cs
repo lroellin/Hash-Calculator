@@ -10,7 +10,7 @@ namespace Dreami.Hash_Calculator
 {
 	static class HashCalculation
 	{
-		public static Hash calculateHash(Hash hash, String filePath)
+		public static Hash CalculateHash(Hash hash, String filePath)
 		{
 			if(filePath == null)
 			{
@@ -56,15 +56,15 @@ namespace Dreami.Hash_Calculator
 			return hash;
 		}
 
-		public static Boolean checkHash(Hash hash, String filePath)
+		public static Boolean CheckHash(Hash hash, String filePath)
 		{
 			StreamReader stream = null;
 			try
 			{
-				String fileToCheck = HashFile.hashFilePath(hash, filePath);
+				String fileToCheck = HashFile.HashFilePath(hash, filePath);
 				stream = new StreamReader(fileToCheck);
 				String line = stream.ReadLine();
-				String hashPart = UserInput.normalize(line.Split(' ')[0]);
+				String hashPart = UserInput.Normalize(line.Split(' ')[0]);
 				return hashPart.Equals(hash.HashString);
 			}
 			catch (Exception e)

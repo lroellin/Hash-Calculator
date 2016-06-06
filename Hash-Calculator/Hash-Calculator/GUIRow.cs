@@ -118,7 +118,7 @@ namespace Dreami.Hash_Calculator
 			}
 		}
 
-		public Boolean isChecked()
+		public Boolean IsChecked()
 		{
 			return (bool)checkBox.IsChecked;
 		}

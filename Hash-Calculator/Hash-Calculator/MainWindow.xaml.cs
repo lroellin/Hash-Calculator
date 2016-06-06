@@ -51,19 +51,20 @@ namespace Dreami.Hash_Calculator
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA256, chkSHA256, txtSHA256, cpySHA256, prgSHA256, imgHCSHA256));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384, imgHCSHA384));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512, imgHCSHA512));
-			chkHashCheck.ToolTip += Messages.infHashFileFormats;
-			setInitialState();
+			chkHashCheck.ToolTip += Messages.HASHFILE_FORMATS;
+			imgCompareTip.ToolTip += Messages.USERINPUT_NORMALIZATION;
+			SetInitialState();
 		}
 
 
-		private void setInitialState()
+		private void SetInitialState()
 		{
 			lblStatus.Content = "Ready";
 			foreach (GUIRow row in rows)
 			{
 				row.CopyButton.Tag = row.TextBox;
 				row.TextBox.Text = "";
-				row.CopyButton.Click += new RoutedEventHandler(this.copyToClipboard);
+				row.CopyButton.Click += new RoutedEventHandler(this.CopyToClipboard);
 				row.ProgressBar.IsIndeterminate = false;
 				row.ProgressBar.Maximum = 1;
 				if(row.HashCheckImage != null)
@@ -72,10 +73,10 @@ namespace Dreami.Hash_Calculator
 					row.HashCheckImage.ClearValue(Image.ToolTipProperty);
 				}
 			}
-			setNormalBorder();
+			SetNormalBorder();
 		}
 
-		private void setNormalBorder()
+		private void SetNormalBorder()
 		{
 			foreach (GUIRow row in rows)
 			{
@@ -84,7 +85,7 @@ namespace Dreami.Hash_Calculator
 			}
 		}
 
-		private void copyToClipboard(object sender, RoutedEventArgs e)
+		private void CopyToClipboard(object sender, RoutedEventArgs e)
 		{
 			TextBox textBox = (TextBox)((Button)sender).Tag;
 			Clipboard.SetText(textBox.Text);
@@ -99,7 +100,7 @@ namespace Dreami.Hash_Calculator
 
             if(openFileDialog.ShowDialog() == true)
             {
-				setInitialState();
+				SetInitialState();
                 txtFileOpen.Text = openFileDialog.FileName;
 				btnCalculate.IsEnabled = true;
 			}
@@ -107,9 +108,9 @@ namespace Dreami.Hash_Calculator
 
 		private async void btnCalculate_Click(object sender, RoutedEventArgs e)
 		{
-			if (!checkTasksCompleted())
+			if (!CheckTasksCompleted())
 			{
-				Messages.calculationOngoing();
+				Messages.CalculationOngoing();
 				return;
 			}
 			// Initialization
@@ -129,10 +130,10 @@ namespace Dreami.Hash_Calculator
 				// Start task for each row
 				foreach (GUIRow row in rows)
 				{
-					if (row.isChecked())
+					if (row.IsChecked())
 					{
 						row.TextBox.Text = "";
-						startTask(row);
+						StartTask(row);
 					}
 				}
 				lblStatus.Content = "Working...";
@@ -142,7 +143,7 @@ namespace Dreami.Hash_Calculator
 			}
 			catch (Exception error)
 			{
-				Messages.readException(error);
+				Messages.ReadException(error);
 			}
 			finally
 			{
@@ -157,12 +158,12 @@ namespace Dreami.Hash_Calculator
 			}
 		}
 
-		private void startTask(GUIRow row)
+		private void StartTask(GUIRow row)
 		{
 			DateTime start = DateTime.UtcNow;
 			row.ProgressBar.IsIndeterminate = true;
 			Hash hash = new Hash(row.HashAlgorithm, false);
-			Task<Hash> task = Task.Factory.StartNew(() => HashCalculation.calculateHash(hash, file));
+			Task<Hash> task = Task.Factory.StartNew(() => HashCalculation.CalculateHash(hash, file));
 			task.ContinueWith((t) =>
 			 {
 				 if (t.IsFaulted)
@@ -180,13 +181,13 @@ namespace Dreami.Hash_Calculator
 					 row.ProgressBar.IsIndeterminate = false;
 					 row.ProgressBar.Maximum = 0;
 					 TimeSpan duration = end - start;
-					 
-					 row.ProgressBar.ToolTip = Math.Round(duration.TotalSeconds, 2) + "s (" + duration.ToString("g") + ")";
+
+					 row.ProgressBar.ToolTip = Messages.RuntimeDisplay(duration);
 					 if(chkHashCheck.IsChecked == true && row.HashCheckImage != null)
 					 {
 						 try
 						 {
-							 if(HashCalculation.checkHash(t.Result, file))
+							 if(HashCalculation.CheckHash(t.Result, file))
 							 {
 								 row.HashCheckImage.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/LockCorrect.png"));
 								 row.HashCheckImage.ToolTip = "Correct";
@@ -213,20 +214,20 @@ namespace Dreami.Hash_Calculator
 
 		
 
-		private bool checkTasksCompleted()
+		private bool CheckTasksCompleted()
 		{
 			return TasksCompleted;
 		}
 
 		private void txtCompare_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			setNormalBorder();
+			SetNormalBorder();
 
 			// Search through results
 			foreach (GUIRow row in rows)
 			{
 				// If found
-				if (row.TextBox.Text.Equals(UserInput.normalize(txtCompare.Text))) 
+				if (row.TextBox.Text.Equals(UserInput.Normalize(txtCompare.Text))) 
 				{
 					row.TextBox.BorderThickness = thkThick;
 					row.TextBox.BorderBrush = Brushes.Green;
@@ -236,27 +237,27 @@ namespace Dreami.Hash_Calculator
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			if (!checkTasksCompleted())
+			if (!CheckTasksCompleted())
 			{
-				Messages.calculationOngoing();
+				Messages.CalculationOngoing();
 				return;
 			}
-			MessageBoxResult result = Messages.saveConfirmation();
+			MessageBoxResult result = Messages.SaveConfirmation();
 			if (result == MessageBoxResult.OK)
 			{
 				try
 				{
 					foreach (GUIRow row in rows)
 					{
-						if (row.isChecked())
+						if (row.IsChecked())
 						{
-							HashFile.writeHashFile(row.Hash, file);
+							HashFile.WriteHashFile(row.Hash, file);
 						}
 					}
 				}
 				catch (Exception error)
 				{
-					Messages.saveException(error);
+					Messages.SaveException(error);
 					lblStatus.Content = "Save aborted";
 				}
 
@@ -285,14 +286,14 @@ namespace Dreami.Hash_Calculator
 
 		private void btnClose_Click(object sender, RoutedEventArgs e)
 		{
-			shutdown();
+			Shutdown();
 		}
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			shutdown();
+			Shutdown();
 		}
 
-		private void shutdown()
+		private void Shutdown()
 		{
 			Application.Current.Shutdown();
 		}

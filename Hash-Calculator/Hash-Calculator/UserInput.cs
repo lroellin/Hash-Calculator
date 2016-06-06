@@ -9,7 +9,7 @@ namespace Dreami.Hash_Calculator
 
 	public static class UserInput
 	{
-		public static String normalize(String input)
+		public static String Normalize(String input)
 		{
 			String normal;
 			normal = input.ToUpper();
