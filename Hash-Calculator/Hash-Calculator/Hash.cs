@@ -8,7 +8,6 @@ namespace Dreami.Hash_Calculator
 {
     public class Hash
     {
-        private byte[] hashValue;
         private SupportedHashAlgorithm hashAlgorithm;
 		private Boolean hmac;
 		private String hashString;
@@ -32,31 +31,6 @@ namespace Dreami.Hash_Calculator
 			}
 		}
 
-        public byte[] HashValue
-        {
-            get
-            {
-                return hashValue;
-            }
-
-            set
-            {
-                hashValue = value;
-            }
-        }
-
-        public String HashString
-        {
-			get
-			{
-				return BitConverter.ToString(HashValue).Replace("-", string.Empty);
-			}
-			set
-			{
-				
-			}
-        }
-
 		public bool? Hmac
 		{
 			get
@@ -73,6 +47,19 @@ namespace Dreami.Hash_Calculator
 				{
 					hmac = false;
 				}
+			}
+		}
+
+		public string HashString
+		{
+			get
+			{
+				return hashString;
+			}
+
+			set
+			{
+				hashString = value;
 			}
 		}
 	}

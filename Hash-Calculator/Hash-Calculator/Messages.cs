@@ -9,7 +9,7 @@ namespace Dreami.Hash_Calculator
 {
 	class Messages
 	{
-		public static readonly String HASHFILE_FORMATS = "- filename.md5\n- filename.sha1\n- filename.sha256\n- filename.sha384\n- filename.sha512\n- filename.ripemd160";
+		public static readonly String HASHFILE_FILENAMES = "- filename.md5\n- filename.sha1\n- filename.sha256\n- filename.sha384\n- filename.sha512\n- filename.ripemd160";
 		public static readonly String USERINPUT_NORMALIZATION = "- Capitalized\n- Alphanumeric only";
 
 		public static void CalculationOngoing()
@@ -29,7 +29,7 @@ namespace Dreami.Hash_Calculator
 
 		public static MessageBoxResult SaveConfirmation()
 		{
-			return MessageBox.Show("This will create or overwrite the following files:\n" + Messages.HASHFILE_FORMATS + "\n\nContinue?", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.Cancel);
+			return MessageBox.Show("This will create or overwrite the following files (when row is checked):\n" + Messages.HASHFILE_FILENAMES + "\n\nContinue?", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.Cancel);
 		}
 
 		public static String RuntimeDisplay(TimeSpan duration)

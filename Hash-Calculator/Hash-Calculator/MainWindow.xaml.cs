@@ -53,7 +53,7 @@ namespace Dreami.Hash_Calculator
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA384, chkSHA384, txtSHA384, cpySHA384, prgSHA384, imgHCSHA384));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512, imgHCSHA512));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.RIPEMD160, chkRIPEMD160, txtRIPEMD160, cpyRIPEMD160, prgRIPEMD160, imgHCRIPEMD160));
-			chkHashCheck.ToolTip += Messages.HASHFILE_FORMATS;
+			chkHashCheck.ToolTip += Messages.HASHFILE_FILENAMES;
 			imgCompareTip.ToolTip += Messages.USERINPUT_NORMALIZATION;
 			SetInitialState();
 		}
@@ -283,7 +283,7 @@ namespace Dreami.Hash_Calculator
 			about.ApplicationLogo = appBi;
 			about.PublisherLogo = cBi;
 			about.HyperlinkText = "http://www.dreami.ch/";
-			about.AdditionalNotes = "Using:\n(Modified) WPF About Box\nCopyright (c) 2014 Christoph Gattnar";
+			about.AdditionalNotes = "Feedback:\nhash-calculator@dreami.ch\nUsing:\n- (Modified) WPF About Box\nCopyright (c) 2014 Christoph Gattnar\n- (Modified) VPN Icon\nby AWS Simple Icons";
 			about.Show();
 
 		}

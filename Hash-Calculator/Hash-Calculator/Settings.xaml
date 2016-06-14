@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hash_Calculator"
         mc:Ignorable="d"
-        Title="Settings" SizeToContent="Height" Width="300">
+        Title="Settings" SizeToContent="Height" Width="300"
+        ResizeMode="CanMinimize">
     <StackPanel HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="70">
         <CheckBox x:Name="chkPlaySound" Content="Play sound when done" />
         <Separator Height="18" />
@@ -19,8 +20,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button x:Name="btnOk" Width="50" Height="25" Content="OK" Grid.Column="0" Click="btnOk_Click" Margin="10,0"/>
-            <Button x:Name="btnCancel" Width="50" Height="25" Content="Cancel" Grid.Row="1" Grid.Column="1" Click="btnCancel_Click"/>
+            <Button x:Name="btnOk" IsDefault="True" Width="50" Height="25" Content="OK" Grid.Column="0" Click="btnOk_Click" Margin="10,0"/>
+            <Button x:Name="btnCancel" IsCancel="True" Width="50" Height="25" Content="Cancel" Grid.Row="1" Grid.Column="1" Click="btnCancel_Click"/>
             <Button x:Name="btnApply" Width="50" Height="25" Content="Apply" Grid.Row="1" Grid.Column="2" Click="btnApply_Click"/>
             <Button x:Name="btnDefault" Width="50" Height="25" Content="Default" Grid.Row="1" Grid.Column="3" Click="btnDefault_Click"/>
         </Grid>

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Hash_Calculator"
         mc:Ignorable="d"
         Title="Hash-Calculator" SizeToContent="Height" Width="800"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        ResizeMode="CanMinimize">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="prgTaskbar"/>
     </Window.TaskbarItemInfo>
@@ -32,7 +33,7 @@
                 <Separator />
                 <MenuItem x:Name="btnClose" Header="_Exit" Click="btnClose_Click" InputGestureText="ALT+F4"/>
             </MenuItem>
-            <MenuItem Header="Tools">
+            <MenuItem Header="_Tools">
                 <MenuItem x:Name="btnSettings" Header="_Settings" Click="btnSettings_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Settings.png"/>
@@ -42,7 +43,7 @@
             <MenuItem Header="_?">
                 <MenuItem x:Name="btnAbout" Header="_About" Click="btnAbout_Click" />
             </MenuItem>
-            
+
         </Menu>
         <StackPanel HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="772">
             <Grid VerticalAlignment="Top" Width="auto" >
@@ -59,8 +60,10 @@
                 <TextBox x:Name="txtFileOpen" HorizontalAlignment="Left" Height="23" Margin="0,10,0,0" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" Width="579" Grid.Column="1" VerticalScrollBarVisibility="Disabled" IsReadOnly="True" />
                 <Button x:Name="btnFileOpen" Content="Open" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="73" Height="23" Click="btnFileOpen_Click" RenderTransformOrigin="0.653,1.29" Grid.Column="2"/>
                 <TextBox x:Name="txtCompare" HorizontalAlignment="Left" Height="44" Margin="0,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="579" FontFamily="Consolas" Grid.Column="1" Grid.Row="1" TextChanged="txtCompare_TextChanged"/>
-                <Label x:Name="lblCompare" Content="Compare" HorizontalAlignment="Left" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                <Label x:Name="lblCompare" Content="Compare hash&#x0a;to results" HorizontalAlignment="Left" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="44"/>
                 <Image x:Name="imgCompareTip" Grid.Column="2" HorizontalAlignment="Left" Height="32" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="32" Source="Resources/Information.png" ToolTip="The input is converted to the internal format:&#x0a;" RenderTransformOrigin="0.625,1.125" />
+
+
             </Grid>
             <Separator Height="11" Margin="0"/>
             <Grid x:Name="grdMain" Width="auto" VerticalAlignment="Top">
@@ -132,13 +135,21 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="12*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="96*"/>
+                    <ColumnDefinition Width="364*"/>
+                    <ColumnDefinition Width="215*"/>
+                    <ColumnDefinition Width="97*"/>
                 </Grid.ColumnDefinitions>
-                <Label x:Name="lblStatus" Content="" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="546"/>
+                <Label x:Name="lblStatus" Content="" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="546"/>
                 <Button x:Name="btnCalculate" Content="Calculate" HorizontalAlignment="Left" VerticalAlignment="Top" Width="73" Click="btnCalculate_Click" IsDefault="True" IsEnabled="False" Grid.Column="3" Margin="10,10,0,0"/>
-                <CheckBox x:Name="chkHashCheck" Content="Check hash files" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="465,13,0,0" RenderTransformOrigin="1.083,0.289" ToolTip="Checks the following files (if row is checked):&#x0a;"/>
+                <CheckBox x:Name="chkHashCheck" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="36,13,0,0" RenderTransformOrigin="1.083,0.289" ToolTip="Checks the following files (if row is checked):&#x0a;" Grid.ColumnSpan="2">
+                    <WrapPanel>
+                        <TextBlock>
+                            Check hash files in directory
+                        </TextBlock>
+                        <Image Height="16"  Width="16" Source="Resources/Information.png" />
+                    </WrapPanel>
+                </CheckBox>
             </Grid>
 
         </StackPanel>

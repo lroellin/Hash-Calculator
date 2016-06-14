@@ -23,34 +23,34 @@ namespace Dreami.Hash_Calculator
 				{
 					case SupportedHashAlgorithm.MD5:
 					{
-						hash.HashValue = MD5.Create().ComputeHash(stream);
+						hash.HashString = BytesToString(MD5.Create().ComputeHash(stream));
 						break;
 					}
 					case SupportedHashAlgorithm.SHA1:
 					{
-						hash.HashValue = SHA1.Create().ComputeHash(stream);
-						break;
+							hash.HashString = BytesToString(SHA1.Create().ComputeHash(stream));
+							break;
 					}
 
 					case SupportedHashAlgorithm.SHA256:
 					{
-						hash.HashValue = SHA256.Create().ComputeHash(stream);
-						break;
+							hash.HashString = BytesToString(SHA256.Create().ComputeHash(stream));
+							break;
 					}
 					case SupportedHashAlgorithm.SHA384:
 					{
-						hash.HashValue = SHA384.Create().ComputeHash(stream);
-						break;
+							hash.HashString = BytesToString(SHA384.Create().ComputeHash(stream));
+							break;
 					}
 					case SupportedHashAlgorithm.SHA512:
 					{
-						hash.HashValue = SHA512.Create().ComputeHash(stream);
-						break;
+							hash.HashString = BytesToString(SHA512.Create().ComputeHash(stream));
+							break;
 					}
 					case SupportedHashAlgorithm.RIPEMD160:
 					{
-						hash.HashValue = RIPEMD160.Create().ComputeHash(stream);
-						break;
+							hash.HashString = BytesToString(RIPEMD160.Create().ComputeHash(stream));
+							break;
 					}
 					default:
 					{
@@ -59,6 +59,11 @@ namespace Dreami.Hash_Calculator
 				}
 			}
 			return hash;
+		}
+
+		private static String BytesToString(byte[] bytes)
+		{
+			return BitConverter.ToString(bytes).Replace("-", "");
 		}
 
 		public static Boolean CheckHash(Hash hash, String filePath)
