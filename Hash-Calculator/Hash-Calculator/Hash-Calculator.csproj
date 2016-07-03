@@ -34,7 +34,7 @@
     <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.4.4.0</ApplicationVersion>
+    <ApplicationVersion>1.4.5.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -254,6 +254,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Information.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Copy_32x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Copy_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PlayVideo_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Run_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

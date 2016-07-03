@@ -22,6 +22,7 @@ namespace Dreami.Hash_Calculator
 		List<Task> tasks = new List<Task>();
 		List<GUIRow> rows = new List<GUIRow>();
 		Boolean tasksCompleted = true;
+		Boolean firstRunCompleted = false;
 		Thickness thkNormal = new Thickness(1);
 		Thickness thkThick = new Thickness(5, 1, 5, 1);
 
@@ -156,7 +157,9 @@ namespace Dreami.Hash_Calculator
 				lblStatus.Content = "Calculation done";
 				prgTaskbar.ProgressState = TaskbarItemProgressState.None;
 				TasksCompleted = true;
-				if(stream != null)
+				firstRunCompleted = true;
+				CheckCompare();
+				if (stream != null)
 				{
 					stream.Close();
 				}
@@ -225,13 +228,20 @@ namespace Dreami.Hash_Calculator
 
 		private void txtCompare_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			SetNormalBorder();
+			if(firstRunCompleted)
+			{
+				SetNormalBorder();
+				CheckCompare();
+			}			
+		}
 
+		private void CheckCompare()
+		{
 			// Search through results
 			foreach (GUIRow row in rows)
 			{
 				// If found
-				if (row.TextBox.Text.Equals(UserInput.Normalize(txtCompare.Text))) 
+				if (row.TextBox.Text.Equals(UserInput.Normalize(txtCompare.Text)))
 				{
 					row.TextBox.BorderThickness = thkThick;
 					row.TextBox.BorderBrush = Brushes.Green;

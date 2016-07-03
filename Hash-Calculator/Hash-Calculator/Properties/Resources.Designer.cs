@@ -63,6 +63,16 @@ namespace Dreami.Hash_Calculator.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Copy_32x {
+            get {
+                object obj = ResourceManager.GetObject("Copy_32x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Dreami {
             get {
                 object obj = ResourceManager.GetObject("Dreami", resourceCulture);
@@ -136,6 +146,16 @@ namespace Dreami.Hash_Calculator.Properties {
         internal static System.Drawing.Bitmap Open {
             get {
                 object obj = ResourceManager.GetObject("Open", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Open_16x {
+            get {
+                object obj = ResourceManager.GetObject("Open_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
