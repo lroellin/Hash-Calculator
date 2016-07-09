@@ -55,7 +55,7 @@ namespace Dreami.Hash_Calculator
 			rows.Add(new GUIRow(SupportedHashAlgorithm.SHA512, chkSHA512, txtSHA512, cpySHA512, prgSHA512, imgHCSHA512));
 			rows.Add(new GUIRow(SupportedHashAlgorithm.RIPEMD160, chkRIPEMD160, txtRIPEMD160, cpyRIPEMD160, prgRIPEMD160, imgHCRIPEMD160));
 			chkHashCheck.ToolTip += Messages.HASHFILE_FILENAMES;
-			imgCompareTip.ToolTip += Messages.USERINPUT_NORMALIZATION;
+			// imgCompareTip.ToolTip += Messages.USERINPUT_NORMALIZATION;
 			SetInitialState();
 		}
 
@@ -143,7 +143,8 @@ namespace Dreami.Hash_Calculator
 
 				// Await all tasks
 				await TaskEx.WhenAll(tasks);
-				if(Properties.Settings.Default.PlaySoundWhenDone)
+				// CheckCompare();
+				if (Properties.Settings.Default.PlaySoundWhenDone)
 				{
 					SystemSounds.Asterisk.Play();
 				}
@@ -158,7 +159,6 @@ namespace Dreami.Hash_Calculator
 				prgTaskbar.ProgressState = TaskbarItemProgressState.None;
 				TasksCompleted = true;
 				firstRunCompleted = true;
-				CheckCompare();
 				if (stream != null)
 				{
 					stream.Close();
@@ -244,6 +244,7 @@ namespace Dreami.Hash_Calculator
 				if (row.TextBox.Text.Equals(UserInput.Normalize(txtCompare.Text)))
 				{
 					row.TextBox.BorderThickness = thkThick;
+					Console.WriteLine(row.TextBox.Text + "=" + UserInput.Normalize(txtCompare.Text));
 					row.TextBox.BorderBrush = Brushes.Green;
 				}
 			}
