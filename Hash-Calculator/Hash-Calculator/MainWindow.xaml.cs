@@ -21,23 +21,11 @@ namespace Dreami.Hash_Calculator
 		String file;
 		List<Task> tasks = new List<Task>();
 		List<GUIRow> rows = new List<GUIRow>();
-		Boolean tasksCompleted = true;
 		Boolean firstRunCompleted = false;
 		Thickness thkNormal = new Thickness(1);
 		Thickness thkThick = new Thickness(5, 1, 5, 1);
 
-		public bool TasksCompleted
-		{
-			get
-			{
-				return tasksCompleted;
-			}
-
-			set
-			{
-				tasksCompleted = value;
-			}
-		}
+		public bool TasksCompleted;
 
 		public MainWindow()
         {
