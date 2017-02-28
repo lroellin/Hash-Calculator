@@ -8,7 +8,9 @@ namespace Dreami.Hash_Calculator
 {
     public class Hash
     {
+        private SupportedHashAlgorithm hashAlgorithm;
 		private Boolean hmac;
+		private String hashString;
 
         public Hash(SupportedHashAlgorithm hashAlgorithm, bool? hmac)
         {
@@ -16,24 +18,49 @@ namespace Dreami.Hash_Calculator
 			this.Hmac = hmac;
         }
 
-		public SupportedHashAlgorithm HashAlgorithm;
+		public SupportedHashAlgorithm HashAlgorithm
+		{
+			get
+			{
+				return hashAlgorithm;
+			}
+
+			set
+			{
+				hashAlgorithm = value;
+			}
+		}
 
 		public bool? Hmac
 		{
+			get
+			{
+				return hmac;
+			}
 
 			set
 			{
 				if(value.HasValue)
 				{
 					hmac = (bool)value;
-				}
-				else
+				} else
 				{
 					hmac = false;
 				}
 			}
 		}
 
-		public string HashString;
+		public string HashString
+		{
+			get
+			{
+				return hashString;
+			}
+
+			set
+			{
+				hashString = value;
+			}
+		}
 	}
 }
