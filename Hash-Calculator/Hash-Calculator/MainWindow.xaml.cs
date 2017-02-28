@@ -136,14 +136,15 @@ namespace Dreami.Hash_Calculator
 					if (row.IsChecked())
 					{
 						row.TextBox.Text = "";
-						StartTask(row);
+						Task task = StartTask(row);
+						tasks.Add(task);
 					}
 				}
 				lblStatus.Content = "Working...";
 
 				// Await all tasks
 				await TaskEx.WhenAll(tasks);
-				// CheckCompare();
+				CheckCompare();
 				if (Properties.Settings.Default.PlaySoundWhenDone)
 				{
 					SystemSounds.Asterisk.Play();
@@ -167,7 +168,7 @@ namespace Dreami.Hash_Calculator
 			}
 		}
 
-		private void StartTask(GUIRow row)
+		private Task StartTask(GUIRow row)
 		{
 			DateTime start = DateTime.UtcNow;
 			row.ProgressBar.IsIndeterminate = true;
@@ -218,7 +219,7 @@ namespace Dreami.Hash_Calculator
 					 }
 				 }
 			 }, TaskScheduler.FromCurrentSynchronizationContext());
-			tasks.Add(task);			
+			return task;			
 		}
 
 		private bool CheckTasksCompleted()
